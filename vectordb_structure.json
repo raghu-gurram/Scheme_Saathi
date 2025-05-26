@@ -1,0 +1,38 @@
+{
+  "deletion_protection": "disabled",
+  "dimension": 1024,
+  "embed": {
+    "dimension": 1024,
+    "field_map": {
+      "text": "text"
+    },
+    "metric": "cosine",
+    "model": "llama-text-embed-v2",
+    "read_parameters": {
+      "dimension": 1024.0,
+      "input_type": "query",
+      "truncate": "END"
+    },
+    "vector_type": "dense",
+    "write_parameters": {
+      "dimension": 1024.0,
+      "input_type": "passage",
+      "truncate": "END"
+    }
+  },
+  "host": "govtschemedata-ib1u2jg.svc.aped-4627-b74a.pinecone.io",
+  "metric": "cosine",
+  "name": "govtschemedata",
+  "spec": {
+    "serverless": {
+      "cloud": "aws",
+      "region": "us-east-1"
+    }
+  },
+  "status": {
+    "ready": true,
+    "state": "Ready"
+  },
+  "tags": null,
+  "vector_type": "dense"
+}
