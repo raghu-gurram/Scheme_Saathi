@@ -2,9 +2,9 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import pinecone
 
-API_KEY = "pcsk_N3hVp_T8tkwe4jMdHTRYxU3WQob7cyPQyguJxRZxgCPKx1ATKaEPyNNY4orgGbN3fwq8r"
+API_KEY = "api_key"
 INDEX_NAME = "govtschemedata"
-ENVIRONMENT = "aped-4627-b74a"
+ENVIRONMENT = "present in host link"
 # 1. Initialize Pinecone
 pc = Pinecone(api_key=API_KEY)
 
