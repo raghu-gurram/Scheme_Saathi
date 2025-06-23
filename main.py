@@ -43,7 +43,7 @@ def validate_schemes(schemes: List[Dict]) -> List[Dict]:
 
 def run_conversational_chatbot():
     """Orchestrates the multi-turn conversational chatbot workflow."""
-    print("🌟 Welcome to the Government Scheme Finder Chatbot! 🌟")
+    print("Welcome to the Government Scheme Finder Chatbot! 🌟")
     logger.info("Starting the chatbot workflow")
 
     # Step 1: Collect user profile
