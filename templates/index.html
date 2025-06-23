@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Scheme Finder Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100vh;
+            gap: 20px;
+        }
+
+        .left-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 20px 0 10px;
+            font-size: 1.2em;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .schemes {
+            margin-top: 30px;
+        }
+
+        .scheme-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .scheme-card h3 {
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .scheme-card p {
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .scheme-details {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-radius: 8px;
+        }
+
+        .scheme-details ul, .scheme-details ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .right-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f5f7fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #3498db;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot-message {
+            background: #e0e0e0;
+            color: #333;
+            margin-right: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        @media (max-width: 800px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel, .right-panel {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left Half: Form, Schemes, Details -->
+        <div class="left-panel">
+            <h1>🌟 Government Scheme Finder Chatbot 🌟</h1>
+
+            <!-- Profile Form -->
+            <section id="profile-section" {% if schemes %}style="display: none;"{% endif %}>
+                <h2>Tell Us About Yourself</h2>
+                <p>Please provide your details to find suitable government schemes.</p>
+                <form id="profile-form" class="profile-form" action="/submit" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" value="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <option value="Telangana" selected>Telangana</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="Male" checked> Male</label>
+                            <label><input type="radio" name="gender" value="Female"> Female</label>
+                            <label><input type="radio" name="gender" value="Other"> Other</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="caste">Caste/Category</label>
+                        <select id="caste" name="caste" required>
+                            <option value="ST" selected>ST</option>
+                            <option value="SC">SC</option>
+                            <option value="OBC">OBC</option>
+                            <option value="General">General</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation">Occupation</label>
+                        <input type="text" id="occupation" name="occupation" value="Unemployed" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="income">Annual Family Income</label>
+                        <select id="income" name="income" required>
+                            <option value="Below 2 lakhs" selected>Below 2 lakhs</option>
+                            <option value="2-5 lakhs">2-5 lakhs</option>
+                            <option value="Above 5 lakhs">Above 5 lakhs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional_details">Additional Details</label>
+                        <textarea id="additional_details" name="additional_details" rows="4">Wants to study abroad</textarea>
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+            </section>
+
+            <!-- Recommended Schemes -->
+            <section id="schemes-section" class="schemes" {% if not schemes %}style="display: none;"{% endif %}>
+                <h2>Recommended Schemes</h2>
+                <p>Here are the schemes we found for you.</p>
+                <div id="scheme-list">
+                    {% for scheme in schemes %}
+                    <div class="scheme-card">
+                        <h3>{{ loop.index }}. {{ scheme.metadata.scheme_name }}</h3>
+                        <p><strong>State:</strong> {{ scheme.metadata.state }}</p>
+                        <p><strong>Brief Description:</strong> {{ scheme.metadata.brief_description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Scheme Details -->
+            <section id="details-section" class="scheme-details" style="display: none;">
+                <h2>Scheme Details</h2>
+                <div id="scheme-details-content"></div>
+            </section>
+        </div>
+
+        <!-- Right Half: Chat Interface -->
+        <div class="right-panel">
+            <div class="chat-header">Chat with Us</div>
+            <div class="chat-history" id="chat-history">
+                <div class="bot-message">Welcome! Please provide your details via the form or say 'show schemes'.</div>
+            </div>
+            <form class="chat-input" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatHistory = document.getElementById('chat-history');
+        const profileSection = document.getElementById('profile-section');
+        const schemesSection = document.getElementById('schemes-section');
+        const detailsSection = document.getElementById('details-section');
+        const schemeList = document.getElementById('scheme-list');
+        const schemeDetailsContent = document.getElementById('scheme-details-content');
+
+        function addMessage(text, isUser) {
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            message.textContent = text;
+            chatHistory.appendChild(message);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function showSchemes() {
+            profileSection.style.display = 'none';
+            schemesSection.style.display = 'block';
+            detailsSection.style.display = 'none';
+        }
+
+        function showSchemeDetails(details) {
+            schemeDetailsContent.innerHTML = `
+                <h3>${details.scheme_name}</h3>
+                <p><strong>Detailed Description:</strong></p>
+                <ul>
+                    ${details.detailed_description.split('. ').filter(p => p).map(p => `<li>${p}.</li>`).join('')}
+                </ul>
+                <p><strong>Eligibility Criteria:</strong></p>
+                <ul>
+                    ${details.eligibility_criteria.split('. ').filter(p => p).map(p => `<li>${p}.</li>`).join('')}
+                </ul>
+                <p><strong>Application Process:</strong></p>
+                <ol>
+                    ${details.application_process.split('. ').filter(p => p).map(p => `<li>${p}.</li>`).join('')}
+                </ol>
+                <p><strong>Documents Required:</strong></p>
+                <ul>
+                    ${details.documents_required.split('. ').filter(p => p).map(p => `<li>${p}.</li>`).join('')}
+                </ul>
+            `;
+            profileSection.style.display = 'none';
+            schemesSection.style.display = 'none';
+            detailsSection.style.display = 'block';
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = chatInput.value.trim();
+            if (!input) return;
+
+            addMessage(input, true);
+            chatInput.value = '';
+
+            try {
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: input })
+                });
+                const data = await res.json();
+                addMessage(data.response, false);
+
+                if (data.action === 'show_schemes') {
+                    showSchemes();
+                } else if (data.action === 'show_details' && data.details) {
+                    showSchemeDetails(data.details);
+                } else if (data.action === 'exit') {
+                    profileSection.style.display = 'none';
+                    schemesSection.style.display = 'none';
+                    detailsSection.style.display = 'none';
+                    schemeDetailsContent.innerHTML = '<p>Goodbye! Refresh to start over.</p>';
+                    detailsSection.style.display = 'block';
+                }
+            } catch (error) {
+                addMessage('Error connecting to server.', false);
+            }
+        });
+    </script>
+</body>
+</html>
