@@ -30,7 +30,7 @@ except Exception as e:
     raise
 
 # Load recommended schemes from JSON
-def load_recommended_schemes(json_path: str = "recommended_schemes2.json") -> List[Dict]:
+def load_recommended_schemes(json_path: str = "recommended_schemes.json") -> List[Dict]:
     """Load recommended schemes from JSON file and normalize structure."""
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
